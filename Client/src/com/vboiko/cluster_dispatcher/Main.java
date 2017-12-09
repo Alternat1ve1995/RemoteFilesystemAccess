@@ -28,8 +28,10 @@ public class Main {
 
 			while (true) {
 
+				System.out.print("Dispatcher -> ");
 				try {
 					System.out.println("Enter machine name to connect:");
+					System.out.print("Dispatcher -> ");
 					String	command = new Scanner(System.in).nextLine();
 					if (command.equals("exit")) {
 
@@ -79,6 +81,7 @@ public class Main {
 
 			while (true) {
 
+				System.out.print("Dispatcher -> ");
 				String	command = scanner.nextLine();
 				String	response;
 
