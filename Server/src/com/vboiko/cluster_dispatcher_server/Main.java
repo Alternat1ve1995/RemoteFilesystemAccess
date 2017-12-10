@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		Runtime				runtime = Runtime.getRuntime();
-		ServerSocket		serverSocket = new ServerSocket(8090);
+		ServerSocket		serverSocket;
 		Scanner				scanner = new Scanner(System.in);
 
 		new Thread(() -> {
@@ -25,6 +25,7 @@ public class Main {
 
 		while (true) {
 
+			serverSocket = new ServerSocket(8090);
 			Socket				server = serverSocket.accept();
 
 			System.out.println("Someone connected...");
@@ -47,6 +48,7 @@ public class Main {
 						server.close();
 						in.close();
 						out.close();
+						serverSocket.close();
 						break;
 					}
 					Process		process = runtime.exec(command);
