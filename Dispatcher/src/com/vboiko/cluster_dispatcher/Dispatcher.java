@@ -1,6 +1,7 @@
 package com.vboiko.cluster_dispatcher;
 
 import com.vboiko.cluster_dispatcher.clusters.Cluster;
+import com.vboiko.cluster_dispatcher.clusters.Heartbeat;
 
 import java.io.*;
 import java.net.ConnectException;
@@ -29,11 +30,9 @@ public class Dispatcher {
 	private OutputStream	serverOutputStream;
 	private InetAddress		inetAddress;
 	private Socket			socket = null;
-	private boolean			connected;
 
 	public Dispatcher(int serverPort) {
 		this.serverPort = serverPort;
-		this.connected = false;
 	}
 
 	private void		dispatcherRuntime() throws IOException {
@@ -44,6 +43,10 @@ public class Dispatcher {
 		DataOutputStream	out;
 
 		// TODO: 12/11/17 Fix bug with error command typing (Dispatcher lags forever)
+
+//		Heartbeat	heartbeat = Heartbeat.getInstance(this);
+//		heartbeat.start();
+
 		while (true) {
 
 			System.out.print("Dispatcher -> ");
@@ -90,7 +93,6 @@ public class Dispatcher {
 			this.serverOutputStream = this.socket.getOutputStream();
 			in = new DataInputStream(this.serverInputStream);
 			out = new DataOutputStream(this.serverOutputStream);
-			this.connected = true;
 			System.out.println("Connection successful!\n");
 		}
 		catch (Exception e) {
@@ -140,7 +142,6 @@ public class Dispatcher {
 		this.socket.close();
 		this.serverOutputStream.close();
 		this.serverInputStream.close();
-		this.connected = false;
 		System.out.println("Disconnected from server...\n");
 	}
 
@@ -185,5 +186,13 @@ public class Dispatcher {
 			dispatcher = new Dispatcher(port);
 			dispatcher.dispatcherRuntime();
 		}
+	}
+
+	public InputStream getServerInputStream() {
+		return serverInputStream;
+	}
+
+	public OutputStream getServerOutputStream() {
+		return serverOutputStream;
 	}
 }

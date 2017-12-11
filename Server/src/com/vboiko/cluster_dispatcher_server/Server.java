@@ -1,5 +1,7 @@
 package com.vboiko.cluster_dispatcher_server;
 
+import com.vboiko.cluster_dispatcher_server.heartbeat.Heartbeat;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,17 +31,21 @@ public class Server {
 
 	public Server() throws IOException {
 
-		this.serverSocket = new ServerSocket(8090);
-		this.server = this.serverSocket.accept();
-		serverInputStream = this.server.getInputStream();
-		serverOutputStream = this.server.getOutputStream();
 		this.runtime = Runtime.getRuntime();
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
 	}
 
 	private void 		serverRuntime() throws IOException {
 
+//		Heartbeat	heartbeat = Heartbeat.getInstance(this);
+//		heartbeat.start();
+
 		while (true) {
 
+			this.openConnection();
 			System.out.println("Someone connected...");
 
 			DataInputStream		in = new DataInputStream(this.serverInputStream);
@@ -55,10 +61,7 @@ public class Server {
 					if (command.equals("disconnect")) {
 
 						System.out.println("Client disconnected...");
-						this.server.close();
-						in.close();
-						out.close();
-						this.serverSocket.close();
+						this.closeConnection();
 						break;
 					}
 					try {
@@ -83,6 +86,24 @@ public class Server {
 		}
 	}
 
+	private void		closeConnection() throws IOException {
+
+		this.server.close();
+		this.serverOutputStream.close();
+		this.serverInputStream.close();
+		this.serverSocket.close();
+		System.out.println("Connection closed");
+	}
+
+	private void 		openConnection() throws IOException {
+
+		this.serverSocket = new ServerSocket(8090);
+		this.server = this.serverSocket.accept();
+		serverInputStream = this.server.getInputStream();
+		serverOutputStream = this.server.getOutputStream();
+		System.out.println("Connection opened at port " + this.serverSocket.getLocalPort());
+	}
+
 	public boolean		heartbeat() throws IOException, InterruptedException {
 
 		this.serverOutputStream.write(new byte[]{4, 2});
@@ -96,6 +117,14 @@ public class Server {
 			}
 		}
 		return (false);
+	}
+
+	public void 		disconnect() throws IOException {
+
+		this.server.close();
+		this.serverInputStream.close();
+		this.serverOutputStream.close();
+		this.serverSocket.close();
 	}
 
 	public static void 	main(String[] args) throws IOException {
