@@ -18,9 +18,11 @@ import java.util.Scanner;
  * The main class that starts the Dispatcher program
  * and represents the logic of communication with Server.
  *
+ * Main class: {@link Dispatcher}
+ *
  */
 
-public class Main {
+public class Dispatcher {
 
 	public static void main(String[] args) throws Exception {
 
@@ -58,6 +60,7 @@ public class Main {
 						System.out.println("[ERROR] Cannot connect to " + command + ", name might be invalid\n");
 						continue;
 					}
+					assert cluster != null;
 					ipAddress = cluster.getIp();
 					inetAddress = InetAddress.getByName(ipAddress);
 					socket = new Socket(inetAddress, serverPort);
@@ -76,6 +79,7 @@ public class Main {
 
 			try {
 
+				assert socket != null;
 				serverInputStream = socket.getInputStream();
 				serverOutputStream = socket.getOutputStream();
 				in = new DataInputStream(serverInputStream);

@@ -9,16 +9,18 @@ package com.vboiko.cluster_dispatcher.clusters;
  * The basic abstract class that contains
  * main information about 42 cluster machines.
  *
+ * Main class: {@link com.vboiko.cluster_dispatcher.Dispatcher}
+ *
  */
 
 public abstract class Cluster {
 
-	protected String	e;
-	protected String	r;
-	protected String	p;
-	protected String	ip;
+	private String	e;
+	private String	r;
+	private String	p;
+	private String	ip;
 
-	public Cluster(String name) {
+	Cluster(String name) {
 
 		this.e = name.substring(1, name.indexOf('r'));
 		this.r = name.substring(name.indexOf('r') + 1, name.indexOf('p'));
@@ -37,7 +39,7 @@ public abstract class Cluster {
 		return (null);
 	}
 
-	protected void setIp() {
+	void setIp() {
 
 		if (this.ip == null) {
 

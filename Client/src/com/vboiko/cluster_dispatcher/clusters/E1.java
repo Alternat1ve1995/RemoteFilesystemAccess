@@ -9,11 +9,13 @@ package com.vboiko.cluster_dispatcher.clusters;
  * Extension of {@link Cluster} class
  * that represents the e1 cluster machines.
  *
+ * Main class: {@link com.vboiko.cluster_dispatcher.Dispatcher}
+ *
  */
 
-public class E1 extends Cluster {
+class E1 extends Cluster {
 
-	public E1(String name) {
+	E1(String name) {
 		super(name);
 		this.setIp();
 	}

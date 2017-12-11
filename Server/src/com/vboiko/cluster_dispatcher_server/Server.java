@@ -14,9 +14,11 @@ import java.util.Scanner;
  * The main class that starts the Server program
  * and represents the logic of reading commands from Dispatcher.
  *
+ * Main class: {@link Server}
+ *
  */
 
-public class Main {
+public class Server {
 
 	public static void main(String[] args) throws IOException {
 
@@ -78,6 +80,7 @@ public class Main {
 					out.writeUTF(response.toString());
 				}
 				catch (IOException e) {
+
 					continue;
 				}
 			}
