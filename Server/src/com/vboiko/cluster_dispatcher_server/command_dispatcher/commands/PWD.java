@@ -17,10 +17,6 @@ import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
 
 public class PWD extends Command {
 
-	public PWD(String command, String flags) {
-		super(command, flags);
-	}
-
 	public PWD(String command) {
 		super(command);
 	}
@@ -28,6 +24,6 @@ public class PWD extends Command {
 	@Override
 	public void execute(FileSystem fileSystem) {
 
-		this.result = fileSystem.getCurrentPath().getAbsolutePath();
+		this.result = new StringBuilder(fileSystem.getAbsolutePath());
 	}
 }

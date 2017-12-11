@@ -60,7 +60,6 @@ public class Server {
 
 				try
 				{
-					Process			process;
 					String			command = in.readUTF();
 					String			response = "";
 					if (command.equals("disconnect")) {

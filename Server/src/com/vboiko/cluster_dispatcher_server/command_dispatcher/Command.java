@@ -16,19 +16,21 @@ import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
 
 public abstract class Command {
 
-	protected String	arguments;
-	protected String	command;
-	protected String	result;
+	protected String		arguments;
+	protected String		command;
+	protected StringBuilder	result;
 
 	public Command(String command, String arguments) {
 
 		this.arguments = arguments;
 		this.command = command;
+		this.result = new StringBuilder("");
 	}
 
 	public Command(String command) {
 		this.command = command;
 		this.arguments = null;
+		this.result = new StringBuilder("");
 	}
 
 
@@ -37,16 +39,16 @@ public abstract class Command {
 	}
 
 	public String getResult() {
-		return result;
+		return result.toString();
 	}
 
 	public void setResult(String result) {
-		this.result = result;
+		this.result = new StringBuilder(result);
 	}
 
 	@Override
 	public String toString() {
-		return (this.result);
+		return (this.result.toString());
 	}
 
 	public abstract void		execute(FileSystem	fileSystem);

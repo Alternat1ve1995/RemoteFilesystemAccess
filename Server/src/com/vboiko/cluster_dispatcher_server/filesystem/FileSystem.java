@@ -61,4 +61,14 @@ public abstract class FileSystem implements Execution {
 	public String pwd() {
 		return (this.currentPath.getAbsolutePath());
 	}
+
+	public File[]	listFiles() {
+
+		return (this.currentPath.listFiles());
+	}
+
+	public String	getAbsolutePath() {
+
+		return this.currentPath.getAbsolutePath();
+	}
 }

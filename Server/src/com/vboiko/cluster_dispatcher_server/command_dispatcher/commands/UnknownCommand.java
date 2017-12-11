@@ -28,6 +28,6 @@ public class UnknownCommand extends Command {
 	@Override
 	public void execute(FileSystem fileSystem) {
 
-		this.result = "Unknown command";
+		this.result = new StringBuilder("Unknown command");
 	}
 }

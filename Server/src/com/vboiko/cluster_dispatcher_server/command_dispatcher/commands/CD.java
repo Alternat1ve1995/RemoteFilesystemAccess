@@ -23,10 +23,6 @@ public class CD extends Command {
 		super(command, flags);
 	}
 
-	public CD(String command) {
-		super(command);
-	}
-
 	@Override
 	public void execute(FileSystem fileSystem) {
 
@@ -40,11 +36,10 @@ public class CD extends Command {
 		}
 		else {
 
-			File[]	listFiles = fileSystem.getCurrentPath().listFiles();
+			File[]	listFiles = fileSystem.listFiles();
 
 			for (File file : listFiles) {
 
-				System.out.println(file.getName());
 				if (file.getName().equals(this.arguments)) {
 					if (file.isDirectory()) {
 						fileSystem.setCurrentPath(file);
@@ -52,7 +47,7 @@ public class CD extends Command {
 					}
 				}
 			}
-			this.result = "No such directory";
+			this.result.replace(0, this.result.length(), "Unknown command");
 		}
 	}
 }
