@@ -3,6 +3,7 @@ package com.vboiko.cluster_dispatcher_server.filesystem;
 import com.vboiko.cluster_dispatcher_server.command_dispatcher.Command;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -24,7 +25,7 @@ public abstract class FileSystem implements Execution {
 	private Command		command;
 	private String		result;
 
-	public Command	executeCommand() {
+	public Command	executeCommand() throws IOException {
 
 		this.command.execute(this);
 		return (this.command);

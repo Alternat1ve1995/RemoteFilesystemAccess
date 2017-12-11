@@ -2,6 +2,8 @@ package com.vboiko.cluster_dispatcher_server.command_dispatcher;
 
 import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
 
+import java.io.IOException;
+
 /**
  *
  * @author Valeriy Boiko
@@ -51,5 +53,5 @@ public abstract class Command {
 		return (this.result.toString());
 	}
 
-	public abstract void		execute(FileSystem	fileSystem);
+	public abstract void		execute(FileSystem	fileSystem) throws IOException;
 }

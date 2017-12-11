@@ -6,6 +6,8 @@ import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.PWD;
 import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.UnknownCommand;
 import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
 
+import java.io.IOException;
+
 /**
  *
  * @author Valeriy Boiko
@@ -57,7 +59,12 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 				break;
 		}
 		this.fileSystem.setCommand(executable);
-		this.fileSystem.executeCommand();
+		try {
+			this.fileSystem.executeCommand();
+		}
+		catch (IOException e) {
+			return "[ERROR]";
+		}
 		return (executable.toString());
 	}
 }
