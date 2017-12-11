@@ -18,6 +18,7 @@ public class UnixFileSystem extends FileSystem {
 
 	public UnixFileSystem() {
 
+		this.delimiter = "/";
 		this.currentPath = new File("/");
 	}
 }

@@ -1,5 +1,8 @@
 package com.vboiko.cluster_dispatcher_server.command_dispatcher;
 
+import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.CD;
+import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.PWD;
+import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.UnknownCommand;
 import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
 
 /**
@@ -25,18 +28,33 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 	@Override
 	public String execute(String command) throws InterruptedException {
 
-		Command		executable;
+		Command		executable = new UnknownCommand("unknown");
+		String[]	input;
 
 		if (command.matches("[a-z]+ -[a-z]+")) {
 
-			String[] input = command.split(" -");
-			executable = new Command(input[0], input[1]);
+			input = command.split(" -");
+		}
+		else if (command.matches("[a-z]+ [a-z.]+")) {
+
+			input = command.split(" ");
 		}
 		else {
 
-			executable = new Command(command);
+			input = new String[2];
+			input[0] = command;
+			input[1] = null;
 		}
-		this.fileSystem.executeCommand(executable);
+
+		switch (input[0]) {
+
+			case "pwd"	: executable = new PWD(input[0]);
+				break;
+			case "cd"	: executable = new CD(input[0], input[1]);
+				break;
+		}
+		this.fileSystem.setCommand(executable);
+		this.fileSystem.executeCommand();
 		return (executable.toString());
 	}
 }

@@ -1,5 +1,7 @@
 package com.vboiko.cluster_dispatcher_server.command_dispatcher;
 
+import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
+
 /**
  *
  * @author Valeriy Boiko
@@ -12,29 +14,23 @@ package com.vboiko.cluster_dispatcher_server.command_dispatcher;
  *
  */
 
-public class Command {
+public abstract class Command {
 
-	private char[]		flags;
-	private String		command;
-	private String		result;
+	protected String	arguments;
+	protected String	command;
+	protected String	result;
 
-	public Command(String command, String flags) {
+	public Command(String command, String arguments) {
 
-		this.flags = new char[flags.length()];
-
-		for (int i = 0; i < flags.length(); i++)
-			this.flags[i] = flags.charAt(i);
+		this.arguments = arguments;
 		this.command = command;
 	}
 
 	public Command(String command) {
 		this.command = command;
-		this.flags = null;
+		this.arguments = null;
 	}
 
-	public char[] getFlags() {
-		return flags;
-	}
 
 	public String getCommand() {
 		return command;
@@ -52,4 +48,6 @@ public class Command {
 	public String toString() {
 		return (this.result);
 	}
+
+	public abstract void		execute(FileSystem	fileSystem);
 }

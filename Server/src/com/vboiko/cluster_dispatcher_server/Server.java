@@ -71,6 +71,8 @@ public class Server {
 					}
 					try {
 						response = this.commandDispatcher.execute(command);
+						if (response == null)
+							response = "";
 					}
 					catch (InterruptedException e) {
 

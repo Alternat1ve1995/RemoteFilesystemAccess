@@ -19,17 +19,31 @@ import java.util.ArrayList;
 
 public abstract class FileSystem implements Execution {
 
-	protected File	currentPath;
+	protected String	delimiter;
+	protected File		currentPath;
+	private Command		command;
+	private String		result;
 
-	public Command	executeCommand(Command command) {
+	public Command	executeCommand() {
 
-		switch (command.getCommand()) {
+		this.command.execute(this);
+		return (this.command);
+	}
 
-			case "pwd" : command.setResult(this.pwd());
-				break;
+	public void setCommand(Command command) {
+		this.command = command;
+	}
 
-		}
-		return (command);
+	public File getCurrentPath() {
+		return currentPath;
+	}
+
+	public void setCurrentPath(File currentPath) {
+		this.currentPath = currentPath;
+	}
+
+	public String getDelimiter() {
+		return delimiter;
 	}
 
 	@Override
