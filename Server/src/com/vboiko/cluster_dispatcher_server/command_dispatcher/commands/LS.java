@@ -75,6 +75,7 @@ public class LS extends Command {
 				}
 			}
 
+			// TODO: 12/11/17 finish this
 			return this.list;
 		}
 	}
