@@ -9,24 +9,15 @@ import java.util.ArrayList;
  *
  * @version 1.0
  *
- * Class that represents basic rules
- * of interaction with the filesystem.
+ * Class that represents a machine filesystem.
  *
  * Main class: {@link com.vboiko.cluster_dispatcher_server.Server}
  *
  */
 
-public class FileSystem implements Command {
+public abstract class FileSystem implements Command {
 
-	private File	currentPath;
-
-	public FileSystem(File currentPath) {
-		this.currentPath = currentPath;
-	}
-
-	public void	executeCommand(String command) {
-
-	}
+	protected File	currentPath;
 
 	@Override
 	public void cd(String arg) {
