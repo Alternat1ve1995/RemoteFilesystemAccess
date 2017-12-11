@@ -9,6 +9,17 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Scanner;
 
+/**
+ *
+ * @author Valeriy Boiko
+ *
+ * @version 1.0
+ *
+ * The main class that starts the Dispatcher program
+ * and represents the logic of communication with Server.
+ *
+ */
+
 public class Main {
 
 	public static void main(String[] args) throws Exception {

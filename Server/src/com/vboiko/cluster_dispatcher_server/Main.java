@@ -5,6 +5,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ *
+ * @author Valeriy Boiko
+ *
+ * @version 1.0
+ *
+ * The main class that starts the Server program
+ * and represents the logic of reading commands from Dispatcher.
+ *
+ */
+
 public class Main {
 
 	public static void main(String[] args) throws IOException {
@@ -40,8 +51,9 @@ public class Main {
 
 				try
 				{
-					String	command = in.readUTF();
-					String	response = "";
+					Process			process;
+					String			command = in.readUTF();
+					StringBuilder	response = new StringBuilder("");
 					if (command.equals("disconnect")) {
 
 						System.out.println("Client disconnected...");
@@ -51,11 +63,19 @@ public class Main {
 						serverSocket.close();
 						break;
 					}
-					Process		process = runtime.exec(command);
+					try {
+						process = runtime.exec(command);
+						process.waitFor();
+					}
+					catch (InterruptedException e) {
+
+						System.out.println("Process has been interrupted... ");
+						continue;
+					}
 					Scanner		processScanner = new Scanner(process.getInputStream());
 					while (processScanner.hasNext())
-						response += processScanner.nextLine() + '\n';
-					out.writeUTF(response);
+						response.append(processScanner.nextLine()).append('\n');
+					out.writeUTF(response.toString());
 				}
 				catch (IOException e) {
 					continue;

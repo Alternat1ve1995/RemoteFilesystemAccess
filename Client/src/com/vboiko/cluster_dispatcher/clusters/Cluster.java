@@ -1,5 +1,15 @@
 package com.vboiko.cluster_dispatcher.clusters;
 
+/**
+ *
+ * @author Valeriy Boiko
+ *
+ * @version 1.0
+ *
+ * The basic abstract class that contains
+ * main information about 42 cluster machines.
+ *
+ */
 
 public abstract class Cluster {
 
