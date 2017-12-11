@@ -1,5 +1,7 @@
 package com.vboiko.cluster_dispatcher_server.filesystem;
 
+import com.vboiko.cluster_dispatcher_server.command_dispatcher.Command;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -15,12 +17,24 @@ import java.util.ArrayList;
  *
  */
 
-public abstract class FileSystem implements Command {
+public abstract class FileSystem implements Execution {
 
 	protected File	currentPath;
 
+	public Command	executeCommand(Command command) {
+
+		switch (command.getCommand()) {
+
+			case "pwd" : command.setResult(this.pwd());
+				break;
+
+		}
+		return (command);
+	}
+
 	@Override
 	public void cd(String arg) {
+
 
 	}
 

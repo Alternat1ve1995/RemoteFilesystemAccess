@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * An Interface that represents possible commands to apply on {@link FileSystem}
  *
  */
-public interface Command {
+public interface Execution {
 
 	void				cd(String arg);
 	ArrayList<String>	ls(String arg);

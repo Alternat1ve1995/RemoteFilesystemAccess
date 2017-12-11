@@ -15,5 +15,5 @@ package com.vboiko.cluster_dispatcher_server.command_dispatcher;
 
 public interface CommandDispatcher {
 
-	void	execute(String command);
+	String	execute(String command) throws InterruptedException;
 }

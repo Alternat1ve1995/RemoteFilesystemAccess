@@ -1,5 +1,8 @@
 package com.vboiko.cluster_dispatcher_server;
 
+import com.vboiko.cluster_dispatcher_server.command_dispatcher.CommandDispatcher;
+import com.vboiko.cluster_dispatcher_server.command_dispatcher.CommandDispatcherImpl;
+import com.vboiko.cluster_dispatcher_server.filesystem.*;
 import com.vboiko.cluster_dispatcher_server.heartbeat.Heartbeat;
 
 import java.io.*;
@@ -28,10 +31,12 @@ public class Server {
 	private boolean			connected;
 	InputStream				serverInputStream;
 	OutputStream			serverOutputStream;
+	CommandDispatcher		commandDispatcher;
 
 	public Server() throws IOException {
 
 		this.runtime = Runtime.getRuntime();
+		this.commandDispatcher = new CommandDispatcherImpl(new UnixFileSystem());
 	}
 
 	public void setConnected(boolean connected) {
@@ -57,7 +62,7 @@ public class Server {
 				{
 					Process			process;
 					String			command = in.readUTF();
-					StringBuilder	response = new StringBuilder("");
+					String			response = "";
 					if (command.equals("disconnect")) {
 
 						System.out.println("Client disconnected...");
@@ -65,18 +70,14 @@ public class Server {
 						break;
 					}
 					try {
-						process = this.runtime.exec(command);
-						process.waitFor();
+						response = this.commandDispatcher.execute(command);
 					}
 					catch (InterruptedException e) {
 
 						System.out.println("Process has been interrupted... ");
 						continue;
 					}
-					Scanner		processScanner = new Scanner(process.getInputStream());
-					while (processScanner.hasNext())
-						response.append(processScanner.nextLine()).append('\n');
-					out.writeUTF(response.toString());
+					out.writeUTF(response);
 				}
 				catch (IOException e) {
 
