@@ -9,7 +9,7 @@ import java.util.Scanner;
  *
  * @author Valeriy Boiko
  *
- * @version 1.0
+ * @version 1.1
  *
  * The main class that starts the Server program
  * and represents the logic of reading commands from Dispatcher.
@@ -20,34 +20,30 @@ import java.util.Scanner;
 
 public class Server {
 
-	public static void main(String[] args) throws IOException {
+	private ServerSocket	serverSocket;
+	private Socket			server;
+	private Runtime			runtime;
+	private boolean			connected;
+	InputStream				serverInputStream;
+	OutputStream			serverOutputStream;
 
-		Runtime				runtime = Runtime.getRuntime();
-		ServerSocket		serverSocket;
-		Scanner				scanner = new Scanner(System.in);
+	public Server() throws IOException {
 
-		new Thread(() -> {
+		this.serverSocket = new ServerSocket(8090);
+		this.server = this.serverSocket.accept();
+		serverInputStream = this.server.getInputStream();
+		serverOutputStream = this.server.getOutputStream();
+		this.runtime = Runtime.getRuntime();
+	}
 
-			while (true) {
-
-				if (scanner.hasNext())
-					if (scanner.nextLine().equals("exit"))
-						System.exit(0);
-			}
-		}).start();
+	private void 		serverRuntime() throws IOException {
 
 		while (true) {
 
-			serverSocket = new ServerSocket(8090);
-			Socket				server = serverSocket.accept();
-
 			System.out.println("Someone connected...");
 
-			InputStream			serverInputStream = server.getInputStream();
-			OutputStream		serverOutputStream = server.getOutputStream();
-
-			DataInputStream		in = new DataInputStream(serverInputStream);
-			DataOutputStream 	out = new DataOutputStream(serverOutputStream);
+			DataInputStream		in = new DataInputStream(this.serverInputStream);
+			DataOutputStream 	out = new DataOutputStream(this.serverOutputStream);
 
 			while (true) {
 
@@ -59,14 +55,14 @@ public class Server {
 					if (command.equals("disconnect")) {
 
 						System.out.println("Client disconnected...");
-						server.close();
+						this.server.close();
 						in.close();
 						out.close();
-						serverSocket.close();
+						this.serverSocket.close();
 						break;
 					}
 					try {
-						process = runtime.exec(command);
+						process = this.runtime.exec(command);
 						process.waitFor();
 					}
 					catch (InterruptedException e) {
@@ -85,5 +81,38 @@ public class Server {
 				}
 			}
 		}
+	}
+
+	public boolean		heartbeat() throws IOException, InterruptedException {
+
+		this.serverOutputStream.write(new byte[]{4, 2});
+		Thread.sleep(1000);
+		byte[]	response = new byte[2];
+		if (this.serverInputStream.read(response) == 2) {
+			if (response[0] == 4 && response[1] == 2) {
+
+				System.out.println("client is alive");
+				return (true);
+			}
+		}
+		return (false);
+	}
+
+	public static void 	main(String[] args) throws IOException {
+
+		Scanner				scanner = new Scanner(System.in);
+
+		new Thread(() -> {
+
+			while (true) {
+
+				if (scanner.hasNext())
+					if (scanner.nextLine().equals("exit"))
+						System.exit(0);
+			}
+		}).start();
+		Server	server = new Server();
+		server.serverRuntime();
+		// TODO: 12/11/17 Do heartbeat
 	}
 }
