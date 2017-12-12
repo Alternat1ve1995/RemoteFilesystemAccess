@@ -21,4 +21,10 @@ public class UnixFileSystem extends FileSystem {
 		this.delimiter = "/";
 		this.currentPath = new File("/");
 	}
+
+	@Override
+	public boolean isRootDir() {
+
+		return this.currentPath.toString().equals(this.delimiter);
+	}
 }

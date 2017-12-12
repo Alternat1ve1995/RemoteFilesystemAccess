@@ -37,7 +37,7 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 
 			input = command.split(" -");
 		}
-		else if (command.matches("[a-z]+ [a-zA-Z.]+")) {
+		else if (command.matches("[a-z]+ [[a-zA-Z.]\\+/]+")) {
 
 			input = command.split(" ");
 		}

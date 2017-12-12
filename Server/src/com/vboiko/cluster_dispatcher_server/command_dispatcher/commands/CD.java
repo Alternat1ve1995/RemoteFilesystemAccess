@@ -2,6 +2,8 @@ package com.vboiko.cluster_dispatcher_server.command_dispatcher.commands;
 
 import com.vboiko.cluster_dispatcher_server.command_dispatcher.Command;
 import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
+import com.vboiko.cluster_dispatcher_server.filesystem.exceptions.NoSuchDirectoryException;
+import com.vboiko.cluster_dispatcher_server.filesystem.exceptions.NotADirectoryException;
 
 import java.io.File;
 
@@ -30,24 +32,59 @@ public class CD extends Command {
 
 			fileSystem.setCurrentPath(new File("/"));
 		}
-		else if (this.arguments.equals("..")) {
+		else {
 
-			fileSystem.setCurrentPath(fileSystem.getCurrentPath().getParentFile());
+			String[]	path = this.arguments.split(fileSystem.getDelimiter());
+
+			for (String dir : path) {
+
+				try {
+					this.enterDirectory(dir, fileSystem);
+				}
+				catch (NotADirectoryException e) {
+
+					this.result = new StringBuilder(dir + " is not a directory.");
+				}
+				catch (NoSuchDirectoryException e) {
+
+					this.result = new StringBuilder(dir + " does not exist.");
+				}
+			}
+		}
+	}
+
+	private void	enterDirectory(String name, FileSystem fileSystem) throws NoSuchDirectoryException, NotADirectoryException {
+
+		String	pathname = fileSystem.getCurrentPath().toString().endsWith("/") ?
+				fileSystem.getCurrentPath().getAbsolutePath() + name :
+				fileSystem.getCurrentPath().getAbsolutePath() + fileSystem.getDelimiter() + name;
+
+		File	dir = new File(pathname);
+
+		if (fileSystem.getCurrentPath().getName().equals(fileSystem.getDelimiter()))
+			throw new NoSuchDirectoryException();
+
+		if (name.equals("..")) {
+
+			if (!fileSystem.isRootDir())
+				fileSystem.setCurrentPath(fileSystem.getCurrentPath().getParentFile());
+			else
+				throw new NoSuchDirectoryException();
+		}
+		else if (dir.exists()) {
+
+			if (dir.isDirectory()) {
+
+				fileSystem.setCurrentPath(dir);
+			}
+			else {
+
+				throw new NotADirectoryException();
+			}
 		}
 		else {
 
-			File[]	listFiles = fileSystem.listFiles();
-
-			for (File file : listFiles) {
-
-				if (file.getName().equals(this.arguments)) {
-					if (file.isDirectory()) {
-						fileSystem.setCurrentPath(file);
-						return;
-					}
-				}
-			}
-			this.result.replace(0, this.result.length(), "Unknown command");
+			throw new NoSuchDirectoryException();
 		}
 	}
 }

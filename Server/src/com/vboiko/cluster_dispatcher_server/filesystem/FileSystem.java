@@ -47,6 +47,7 @@ public abstract class FileSystem implements Execution {
 		return delimiter;
 	}
 
+	public abstract boolean	isRootDir();
 	@Override
 	public void cd(String arg) {
 
