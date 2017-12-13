@@ -36,22 +36,22 @@ public abstract class Command {
 	}
 
 
-	public String getCommand() {
+	public String 			getCommand() {
 		return command;
 	}
 
-	public String getResult() {
+	public String 			getResult() {
 		return result.toString();
 	}
 
-	public void setResult(String result) {
+	public void 			setResult(String result) {
 		this.result = new StringBuilder(result);
 	}
 
 	@Override
-	public String toString() {
+	public String 			toString() {
 		return (this.result.toString());
 	}
 
-	public abstract void		execute(FileSystem	fileSystem) throws IOException;
+	public abstract void	execute(FileSystem	fileSystem) throws IOException;
 }

@@ -23,7 +23,6 @@ public abstract class FileSystem implements Execution {
 	protected String	delimiter;
 	protected File		currentPath;
 	private Command		command;
-	private String		result;
 
 	public Command	executeCommand() throws IOException {
 

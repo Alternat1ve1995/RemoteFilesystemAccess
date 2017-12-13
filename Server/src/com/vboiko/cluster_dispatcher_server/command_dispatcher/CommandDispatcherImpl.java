@@ -1,9 +1,6 @@
 package com.vboiko.cluster_dispatcher_server.command_dispatcher;
 
-import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.CD;
-import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.LS;
-import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.PWD;
-import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.UnknownCommand;
+import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.*;
 import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
 import java.io.IOException;
 
@@ -50,11 +47,15 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 
 		switch (input[0]) {
 
-			case "pwd"	: executable = new PWD(input[0]);
+			case "pwd"		: executable = new PWD(input[0]);
 				break;
-			case "cd"	: executable = new CD(input[0], input[1]);
+			case "cd"		: executable = new CD(input[0], input[1]);
 				break;
-			case "ls"	: executable = new LS(input[0], input[1]);
+			case "ls"		: executable = new LS(input[0], input[1]);
+				break;
+			case "touch"	: executable = new Touch(input[0], input[1]);
+				break;
+			case "rm"		: executable = new RM(input[0], input[1]);
 				break;
 		}
 		this.fileSystem.setCommand(executable);
