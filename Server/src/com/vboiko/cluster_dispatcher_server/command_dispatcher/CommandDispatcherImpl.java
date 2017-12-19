@@ -10,7 +10,7 @@ import java.io.IOException;
  *
  * @author Valeriy Boiko
  *
- * @version 1.0
+ * @version 1.2
  *
  * Implementation of {@link CommandDispatcher} interface
  *
@@ -62,6 +62,8 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 				case "touch"	: executable = new Touch(input[0], input[1]);
 					break;
 				case "rm"		: executable = input[2] == null ? new RM(input[0], input[1]) : new RM(input[0], input[1] + " " + input[2]);
+					break;
+				case "mkdir"	: executable = new MKDIR(input[0], input[1]);
 					break;
 			}
 			this.fileSystem.setCommand(executable);

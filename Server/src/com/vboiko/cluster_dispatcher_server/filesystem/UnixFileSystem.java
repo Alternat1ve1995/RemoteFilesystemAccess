@@ -7,13 +7,15 @@ import java.util.ArrayList;
  *
  * @author Valeriy Boiko
  *
- * @version 1.0
+ * @version 1.1
  *
  * Implementation of {@link FileSystem}
- * Describes standard UNIX filesystem.
+ * Describes UNIX filesystem model.
  *
  * Main class: {@link com.vboiko.cluster_dispatcher_server.Server}
+ *
  */
+
 public class UnixFileSystem extends FileSystem {
 
 	public UnixFileSystem() {

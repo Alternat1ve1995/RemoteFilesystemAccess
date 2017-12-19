@@ -10,9 +10,9 @@ import java.util.ArrayList;
  *
  * @author Valeriy Boiko
  *
- * @version 1.0
+ * @version 1.1
  *
- * Class that represents a machine filesystem.
+ * Class that represents a basic filesystem model.
  *
  * Main class: {@link com.vboiko.cluster_dispatcher_server.Server}
  *
