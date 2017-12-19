@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Valeriy Boiko
  *
- * @version 1.1
+ * @version 1.2
  *
  * Class that represents a basic filesystem model.
  *
@@ -25,10 +25,9 @@ public abstract class FileSystem implements Execution {
 	private Command		command;
 	protected String	root;
 
-	public Command	executeCommand() throws IOException {
+	public void 	executeCommand() throws IOException {
 
 		this.command.execute(this);
-		return (this.command);
 	}
 
 	public void setCommand(Command command) {
