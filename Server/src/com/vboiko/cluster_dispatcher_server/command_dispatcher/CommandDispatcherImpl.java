@@ -2,6 +2,8 @@ package com.vboiko.cluster_dispatcher_server.command_dispatcher;
 
 import com.vboiko.cluster_dispatcher_server.command_dispatcher.commands.*;
 import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
+import com.vboiko.cluster_dispatcher_server.filesystem.exceptions.TooManyArgumentsException;
+
 import java.io.IOException;
 
 /**
@@ -30,41 +32,50 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 		Command		executable = new UnknownCommand("unknown");
 		String[]	input;
 
-		if (command.matches("[a-z]+ -[a-zA-Z]+")) {
+		if (command.matches("[a-z]+ -[a-zA-Z]+ [a-zA-Z._,*+=\\-]+")) {
 
-			input = command.split(" -");
+			input = command.split(" ");
 		}
-		else if (command.matches("[a-z]+ [[a-zA-Z.]\\+/]+")) {
+		else if (command.matches("[a-z]+ [[a-zA-Z._,*+=\\-]+/]+")) {
 
 			input = command.split(" ");
 		}
 		else {
 
-			input = new String[2];
+			input = new String[3];
 			input[0] = command;
 			input[1] = null;
+			input[2] = null;
 		}
 
-		switch (input[0]) {
-
-			case "pwd"		: executable = new PWD(input[0]);
-				break;
-			case "cd"		: executable = new CD(input[0], input[1]);
-				break;
-			case "ls"		: executable = new LS(input[0], input[1]);
-				break;
-			case "touch"	: executable = new Touch(input[0], input[1]);
-				break;
-			case "rm"		: executable = new RM(input[0], input[1]);
-				break;
-		}
-		this.fileSystem.setCommand(executable);
 		try {
-			this.fileSystem.executeCommand();
+			
+			// TODO: 19.12.2017 Refactor this
+			switch (input[0]) {
+				
+				case "pwd"		: executable = new PWD(input[0]);
+					break;
+				case "cd"		: executable = new CD(input[0], input[1]);
+					break;
+				case "ls"		: executable = new LS(input[0], input[1]);
+					break;
+				case "touch"	: executable = new Touch(input[0], input[1]);
+					break;
+				case "rm"		: executable = input[2] == null ? new RM(input[0], input[1]) : new RM(input[0], input[1] + " " + input[2]);
+					break;
+			}
+			this.fileSystem.setCommand(executable);
+			try {
+				this.fileSystem.executeCommand();
+			}
+			catch (IOException e) {
+				return "[ERROR]";
+			}
+			return (executable.toString());
 		}
-		catch (IOException e) {
-			return "[ERROR]";
+		catch (TooManyArgumentsException e) {
+			
+			return "Too many arguments";
 		}
-		return (executable.toString());
 	}
 }

@@ -3,9 +3,12 @@ package com.vboiko.cluster_dispatcher_server.command_dispatcher.commands;
 import com.vboiko.cluster_dispatcher_server.command_dispatcher.Command;
 import com.vboiko.cluster_dispatcher_server.filesystem.FileSystem;
 import com.vboiko.cluster_dispatcher_server.filesystem.exceptions.NoSuchFileException;
+import com.vboiko.cluster_dispatcher_server.filesystem.exceptions.TooManyArgumentsException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  *
@@ -18,9 +21,27 @@ import java.io.IOException;
  */
 
 public class RM extends Command {
+	
+	private String		flags;
+	private String		filename;
 
-	public RM(String command, String arguments) {
+	public RM(String command, String arguments) throws TooManyArgumentsException {
 		super(command, arguments);
+		
+		String[]	dta = arguments.split(" ");
+		String		flags = null;
+		
+		if (dta.length > 2)
+			throw new TooManyArgumentsException();
+		for (String s : dta) {
+			
+			if (s.contains("-"))
+				flags = s;
+			else
+				this.filename = s;
+		}
+		
+		this.flags = flags;
 	}
 
 	public RM(String command) {
@@ -38,13 +59,27 @@ public class RM extends Command {
 
 		try {
 
-			if (this.deleteFile(fileSystem)) {
-
-				this.result = new StringBuilder(this.arguments + " has been deleted.");
+			if (this.flags == null) {
+				
+				if (this.deleteFile(fileSystem)) {
+					
+					this.result = new StringBuilder(this.arguments + " has been deleted.");
+				}
+				else {
+					
+					this.result = new StringBuilder("Cannot delete " + this.arguments);
+				}
 			}
-			else {
-
-				this.result = new StringBuilder("Cannot delete " + this.arguments);
+			else if (this.flags.contains("r")) {
+				
+				if (this.deleteDirectory(fileSystem)) {
+					
+					this.result = new StringBuilder(this.filename + " has been deleted.");
+				}
+				else {
+					
+					this.result = new StringBuilder("Cannot delete " + this.filename);
+				}
 			}
 		}
 		catch (NoSuchFileException e) {
@@ -68,7 +103,24 @@ public class RM extends Command {
 	}
 
 	private boolean		deleteDirectory(FileSystem fileSystem) {
-
-		return false;
+		
+		File	dir = new File(fileSystem.getCurrentPath().getAbsolutePath() + fileSystem.getDelimiter() + this.filename);
+		return this.del(dir);
+	}
+	
+	private boolean		del(File file) {
+		
+		if (!file.exists())
+			return false;
+		if (file.isDirectory()) {
+			
+			for (File f : file.listFiles())
+				del(f);
+			file.delete();
+		}
+		else {
+			file.delete();
+		}
+		return true;
 	}
 }
