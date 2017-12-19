@@ -19,7 +19,10 @@ public abstract class Cluster {
 	private String	r;
 	private String	p;
 	private String	ip;
-
+	
+	public Cluster() {
+	}
+	
 	Cluster(String name) {
 
 		this.e = name.substring(1, name.indexOf('r'));
@@ -36,6 +39,10 @@ public abstract class Cluster {
 			return (new E2(name));
 		else if (name.contains("e3"))
 			return (new E3(name));
+		else if (name.equals("local"))
+			return (new NonClusterMachine("127.0.0.1"));
+		else if (name.matches("[0-9]+.[0-9]+.[0-9]+.[0-9]+"))
+			return (new NonClusterMachine(name));
 		return (null);
 	}
 
@@ -45,6 +52,11 @@ public abstract class Cluster {
 
 			this.ip = "10.11" + this.e + "." + this.r + "." + this.p;
 		}
+	}
+	
+	void setIp(String ip) {
+		
+		this.ip = ip;
 	}
 
 	public String getIp() {

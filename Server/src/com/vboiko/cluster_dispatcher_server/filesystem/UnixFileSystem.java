@@ -19,7 +19,8 @@ public class UnixFileSystem extends FileSystem {
 	public UnixFileSystem() {
 
 		this.delimiter = "/";
-		this.currentPath = new File("/");
+		this.root = "C:\\";
+		this.currentPath = new File(this.root);
 	}
 
 	@Override

@@ -34,9 +34,12 @@ public class Server {
 	CommandDispatcher		commandDispatcher;
 
 	public Server() throws IOException {
-
+		
 		this.runtime = Runtime.getRuntime();
-		this.commandDispatcher = new CommandDispatcherImpl(new UnixFileSystem());
+		String	os = System.getProperty("os.name");
+		
+		FileSystem	fileSystem = os.contains("Windows") ? new WindowsFileSystem() : new UnixFileSystem();
+		this.commandDispatcher = new CommandDispatcherImpl(fileSystem);
 	}
 
 	public void setConnected(boolean connected) {

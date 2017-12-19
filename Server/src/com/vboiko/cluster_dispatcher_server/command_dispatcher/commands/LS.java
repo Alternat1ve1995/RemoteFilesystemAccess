@@ -83,7 +83,14 @@ public class LS extends Command {
 					sb.insert(0, Formatter.format(attrs.creationTime().toString()) + " ");
 					if (this.listFiles[i].canRead()) {
 
-						int	len = this.listFiles[i].isDirectory() ? this.listFiles[i].list().length : 1;
+						int	len;
+						
+						try {
+							len = this.listFiles[i].isDirectory() ? this.listFiles[i].list().length : 1;
+						}
+						catch (NullPointerException e) {
+							len = 0;
+						}
 						String	tmp = String.format("%4d ", len);
 						sb.insert(0, tmp);
 					}
