@@ -64,7 +64,7 @@ public class Server {
 				try
 				{
 					String			command = in.readUTF();
-					String			response = "";
+					String			response;
 					if (command.equals("disconnect")) {
 
 						System.out.println("Client disconnected...");

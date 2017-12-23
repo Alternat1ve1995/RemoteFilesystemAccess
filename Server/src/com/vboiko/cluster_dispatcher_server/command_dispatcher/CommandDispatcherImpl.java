@@ -51,6 +51,7 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 		try {
 			
 			// TODO: 19.12.2017 Refactor this
+			// TODO: 12/23/17 Do it based on HashMap<String, Command>
 			switch (input[0]) {
 				
 				case "pwd"		: executable = new PWD(input[0]);
@@ -64,6 +65,8 @@ public class CommandDispatcherImpl implements CommandDispatcher {
 				case "rm"		: executable = input[2] == null ? new RM(input[0], input[1]) : new RM(input[0], input[1] + " " + input[2]);
 					break;
 				case "mkdir"	: executable = new MKDIR(input[0], input[1]);
+					break;
+				case "cat"		: executable = new Cat(input[0], input[1]);
 					break;
 			}
 			this.fileSystem.setCommand(executable);

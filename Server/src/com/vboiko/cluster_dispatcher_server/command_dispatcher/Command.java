@@ -16,6 +16,8 @@ import java.io.IOException;
  *
  */
 
+// TODO: 12/23/17 Make command executable by any path
+
 public abstract class Command {
 
 	protected String		arguments;
